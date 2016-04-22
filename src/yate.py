@@ -53,7 +53,7 @@ def main():
     parser.set_data(buffr)
     output = {}
     for key, pdef in config.PARSER_DEFS.items():
-        if hasattr(pdef,'key'):
+        if 'key' in pdef:
             key = pdef.key
         output[key] = parser.use(pdef)
 
@@ -64,7 +64,7 @@ def main():
             if type(value) is list:
                 print ('{0: <10}'.format(key.upper()),
                        ':',
-                       value.join(', '))
+                       ', '.join(value))
             else:
                 print ('{0: <10}'.format(key.upper()),
                        ':',
