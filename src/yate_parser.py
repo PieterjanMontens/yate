@@ -7,11 +7,12 @@ class Parse:
     __text = None
 
     #################################### PUBLIC METHODS
-    def __init__(self,filename):
-        self.filename = filename
+    def __init__(self):
+        return None
 
-        with open(self.filename, 'r+') as fl:
-            self.__text = fl.read()
+    def set_data(self,text):
+        self.__text = text
+        return None
 
     def use(self,df):
         if df['parser_type'] == 'lambda':
