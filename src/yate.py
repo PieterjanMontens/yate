@@ -9,8 +9,6 @@ import config
 from pathlib import Path
 from yate_parser import Parse
 
-
-
 ################################### MAIN STUFF
 ##############################################
 def main():
