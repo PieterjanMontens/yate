@@ -58,7 +58,7 @@ def main():
 
     ############ Handle output
     if data_out == 'stdout':
-        for key,value in output.items():
+        for key,value in sorted(output.items()):
             if type(value) is list:
                 print ('{0: <10}'.format(key.upper()),
                        ':',
