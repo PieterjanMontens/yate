@@ -2,6 +2,7 @@
 ## https://github.com/PieterjanMontens
 
 import sys
+import config
 from yate_parser import Parse
 
 def y_error(Msg):

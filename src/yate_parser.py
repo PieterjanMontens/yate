@@ -24,7 +24,7 @@ class Parse:
             return df['fun'](check_text)
 
         elif df['parser_type'] == 'regex_extract':
-            reg = re.compile(df['regex'],re.DOTALL | re.I)
+            reg = re.compile(df['regex'],re.DOTALL | re.I | re.M)
             match = re.search(reg, check_text)
             if match is None:
                 return 'not_found'

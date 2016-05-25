@@ -18,7 +18,7 @@ def main():
     ############ prepare values
     options, arguments = arguments_parse()
     text      = stdin_read()
-    contentId = contentId_obtain(text, options.id_field)
+    contentId = options.force_id if options.force_id is not None else contentId_obtain(text, options.id_field)
     diffPath  = config.DIFF_PATH % contentId
     txtPath   = config.TXT_PATH % contentId
     filepath  = Path(txtPath)
@@ -47,6 +47,7 @@ def arguments_parse() :
     p = optparse.OptionParser()
     p.add_option('--debug', '-d', action="store_true", default=False, help="Enable Debug")
     p.add_option('--id_field', '-i', action="store", default=None, help="Set field containing ID value")
+    p.add_option('--force_id', '-f', action="store", default=None, help="Force ID value")
     options, arguments =  p.parse_args()
 
     if options.id_field is None:
