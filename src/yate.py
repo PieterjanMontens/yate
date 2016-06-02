@@ -20,6 +20,7 @@ def main():
     p = optparse.OptionParser()
     p.add_option('--inp','-i', action="store", default=None, help="Input file (utf-8 text only)")
     p.add_option('--json','-j',action="store_true", default=False, help="Output JSON")
+    p.add_option('--include_text',action="store_true", default=False, help="Add input text")
     options, arguments = p.parse_args()
 
     if options.json:
@@ -54,6 +55,9 @@ def main():
         if 'key' in pdef:
             key = pdef.key
         output[key] = parser.use(pdef)
+
+    if options.include_text:
+        output['text'] = buffr
 
 
     ############ Handle output
