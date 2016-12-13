@@ -5,12 +5,18 @@
 # Tests if data points are correctly filled in
 
 
-import optparse
-import sys
-import json
+import optparse, sys, re
+import json, yaml
 import config
-import re
-from yate_tools import y_error, y_print
+import logger
+
+abspath = os.path.abspath(__file__)
+os.chdir(os.path.dirname(abspath))
+
+with open('./logging.conf','r') as f:
+    logConf = yaml.load(f)
+logging.config.dictConfig(logConf)
+logger = logging.getLogger('yateLogger')
 
 ################################### MAIN STUFF
 ##############################################
@@ -41,19 +47,17 @@ def main():
             identifier = data[id_field] if id_field is not "undefined" else "undefined"
             if discard_field is not "undefined" and data[options.discard_field] is True:
                 tester.log("Record with Contentid " + identifier +" is discarded")
-                y_error("Record with Contentid " + identifier +" is discarded\n\n")
+                logger.warning("Record with Contentid " + identifier +" is discarded\n\n")
                 continue
             Good = tester.is_ok(json.loads(line))
             if not Good and not quiet:
-                    y_error("\nFound errors. Contentid: "+identifier+"\n\n")
+                    logger.warning("Found errors. Contentid: "+identifier+"\n\n")
                     tester.log("Found errors. Contentid: "+identifier+"\nRecord: "+line+"\n\n")
             if Good and options.validate:
-                y_print(line)
+                logger.info(line)
     except ValueError as e:
         if not quiet:
-            print(e)
-            y_error('\n Tester Warning: line failed to parse, probably not valid json\n')
-            y_error(line)
+            logger.warning('line failed to parse, probably not valid json: %s' % line)
 
         ############ Job's done !
     exit(0)
@@ -102,10 +106,10 @@ class Tester:
             if not 'test_type' in df:
                 continue
             if data[key] == None:
-                y_error('\tWarning: key ' + key + ' not found in data')
+                logger.warning('key ' + key + ' not found in data')
                 found_error = True
             if not self.__is_valid(data[key], df):
-                y_error('\n\tWarning: check for ' + key + ' failed')
+                logger.warning('check for ' + key + ' failed')
                 self.__log('\n\tKey "' + key + '": BAD FORMAT')
                 found_error = True
             #else:
@@ -116,7 +120,7 @@ class Tester:
                 if test['test'](data) == False:
                     found_error = True
                     self.__log('Test ' + key +' Failed')
-                    y_error('\n\tWarning: check for ' + key + ' failed')
+                    logger.warning('check for ' + key + ' failed')
                 #else:
                 #    self.__log('Test ' + key +' Succeeded')
 
@@ -156,9 +160,9 @@ class Tester:
         if (self.__quiet):
             return None
         if (self.__debug):
-            print(msg)
+            logger.debug(msg)
         if (self.__logf):
-            with open(self.__logf, 'a') as out:
+            with open(self.__log, 'a') as out:
                 out.write(msg + '\n')
 
 ######################################### INIT
